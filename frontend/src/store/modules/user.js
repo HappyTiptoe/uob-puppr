@@ -20,6 +20,11 @@ export const mutations = {
   UNAUTH: (state) => {
     state.isAuthenticated = false
     state.user = {}
+  },
+
+  UPDATE_BIO: (state, payload) => {
+    const { newBio } = payload
+    state.user.bio = newBio
   }
 }
 

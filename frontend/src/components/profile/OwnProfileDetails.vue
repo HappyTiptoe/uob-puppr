@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'OwnProfileDetails',
@@ -56,8 +56,13 @@ export default {
       this.isEditing = false
     },
     onSave () {
+      const { newBio } = this
       this.isEditing = false
-    }
+      this.updateBio({ newBio })
+    },
+    ...mapActions({
+      updateBio: 'user/updateBio'
+    })
   }
 }
 </script>

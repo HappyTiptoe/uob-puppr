@@ -88,7 +88,6 @@ export default {
       // upload image to Firebase
       const imageURL = await FirebaseService.upload(croppedImageDataURL)
 
-
       // clean up
       this.caption = ''
       this.imageDataURL = ''
