@@ -1,13 +1,31 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-  </div>
+<template lang="pug">
+  .home
+    .pageloader.is-danger(
+      :class="{ 'is-active': isLoadingPage }"
+      ref="pageloader"
+    )
+      span.title Preparing good boys...
+    home-hero
+    home-content
 </template>
 
 <script>
-// @ is an alias to /src
+import HomeHero from '@/components/home/HomeHero.vue'
+import HomeContent from '@/components/home/HomeContent.vue'
 
 export default {
-  name: 'home'
+  name: 'home',
+  components: {
+    HomeHero,
+    HomeContent
+  },
+  data () {
+    return {
+      isLoadingPage: true
+    }
+  },
+  mounted () {
+    this.isLoadingPage = false
+  }
 }
 </script>

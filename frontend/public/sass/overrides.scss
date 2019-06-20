@@ -1,0 +1,12 @@
+@charset "utf-8";
+@import "../../node_modules/bulma/bulma.sass";
+@import "../../node_modules/bulma-pageloader/dist/css/bulma-pageloader.min.css";
+
+.no-highlight {
+  -webkit-touch-callout: none; // iOS Safari
+  -webkit-user-select: none;   // Safari
+  -khtml-user-select: none;    // Konquerer HTML
+  -moz-user-select: none;      // Firefox
+  -ms-user-select: none;       // IE/Edge
+  user-select: none;           // Chrome/Opera
+}

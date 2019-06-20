@@ -1,29 +1,39 @@
-<template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+<template lang="pug">
+#app
+  //- post-modal
+  //- post-upload-modal
+  //- profile-upload-modal
+  navbar(@show-upload-modal="showUploadModal")
+  router-view(:key="$route.fullPath")
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+import PostModal from '@/components/modals/PostModal.vue'
+import PostUploadModal from '@/components/modals/PostUploadModal.vue'
+import ProfileUploadModal from '@/components/modals/ProfileUploadModal.vue'
+import Navbar from '@/components/navbar/Navbar.vue'
+
+export default {
+  name: 'App',
+  components: {
+    PostModal,
+    PostUploadModal,
+    ProfileUploadModal,
+    Navbar
+  },
+  methods: {
+    showUploadModal () {
+      console.log(`showing upload modal`)
     }
   }
+}
+
+</script>
+
+<style lang="scss" scoped>
+@import '~@/../public/css/style.css';
+@import '~@/../node_modules/@fortawesome/fontawesome-free/css/all.css';
+#app {
+  overflow: hidden;
 }
 </style>
