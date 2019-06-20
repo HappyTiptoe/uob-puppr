@@ -4,15 +4,25 @@
       .columns
         //- load from local storage/API depending on if user's profile
         .column.is-3
-          own-profile-details(v-if="isUsersProfile")
-          other-profile-details(v-else)
+          own-profile-details(
+            v-if="isUsersProfile"
+            @loaded="isProfileLoaded = true"
+          )
+          other-profile-details(
+            v-else
+            @loaded="isProfileLoaded = true"
+          )
 
         .column.is-9
-          profile-gallery
+          profile-gallery(
+            :username="username"
+            @loaded="isGalleryLoaded = true"
+          )
 
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import OwnProfileDetails from '@/components/profile/OwnProfileDetails.vue'
 import OtherProfileDetails from '@/components/profile/OtherProfileDetails.vue'
 import ProfileGallery from '@/components/profile/ProfileGallery.vue'
@@ -29,11 +39,28 @@ export default {
       type: String,
       default: '',
       required: true
+    }
+  },
+  data () {
+    return {
+      isProfileLoaded: false,
+      isGalleryLoaded: false
+    }
+  },
+  computed: {
+    isUsersProfile () {
+      return this.username === this.ownUsername
     },
-    isUsersProfile: {
-      type: Boolean,
-      default: true,
-      required: false
+    isPageLoaded () {
+      return (this.isProfileLoaded && this.isGalleryLoaded)
+    },
+    ...mapGetters({
+      ownUsername: 'user/getUsername'
+    })
+  },
+  watch: {
+    isPageLoaded (n, o) {
+      if (n) this.$emit('loaded')
     }
   }
 }

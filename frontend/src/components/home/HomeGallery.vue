@@ -6,32 +6,35 @@
       :key="idx"
     )
       .box.post
-        figure.image.post-image.is-flex
+        figure.image.post-image.is-flex(@click="showPostModal({ post })")
           img(:src="post.imageURL")
 
         .post-details
           p.caption.has-text-weight-bold {{ post.caption }}
           p.post-info Posted {{ '2 days ago' }} by
-            a  @{{ post.author }}
-
+            router-link(:to="{ path: `/users/${post.author}` }")  @{{ post.author }}
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import PostService from '@/services/post.service'
+
 export default {
   name: 'HomeGallery',
   data () {
     return {
-      posts: [
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' },
-        { author: 'Jim', caption: 'Hello There', favorites: 0, imageURL: 'https://picsum.photos/200/300' }
-      ]
+      posts: []
     }
+  },
+  async created () {
+    const { data } = await PostService.getAll()
+    this.posts = data.posts || []
+    this.$emit('loaded')
+  },
+  methods: {
+    ...mapActions({
+      showPostModal: 'modal/showPostModal'
+    })
   }
 }
 </script>
@@ -43,7 +46,6 @@ export default {
   & .post {
     width: 100%;
     padding: 0rem;
-    cursor: pointer;
     overflow: hidden;
     transition: all 0.2s ease;
 
@@ -54,6 +56,7 @@ export default {
     }
 
     &-image {
+      cursor: pointer;
       max-height: 175px;
       justify-content: center;
       align-items: center;

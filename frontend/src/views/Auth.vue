@@ -27,6 +27,9 @@ export default {
       default: 'login',
       required: true
     }
+  },
+  mounted () {
+    this.$emit('loaded')
   }
 }
 </script>

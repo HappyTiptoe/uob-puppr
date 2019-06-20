@@ -1,12 +1,12 @@
 <template lang="pug">
 .modal.is-active
-  .modal-background(@click="$emit('close')")
+  .modal-background(@click="hide")
   .modal-content
     .box.is-flex
-      h1.title.has-text-centered Create a new post
+      h1.title.has-text-centered Upload a profile picture
 
       h2.subtitle.has-text-centered(v-if="!imageDataURL") Choose an image...
-      h2.subtitle.has-text-centered(v-else) Now add a caption!
+      h2.subtitle.has-text-centered(v-else) Crop to your liking!
 
       modal-file-select(
         v-if="!imageDataURL"
@@ -14,7 +14,7 @@
       )
 
       template(v-else)
-        .progress(v-show="isUploading")
+        .progress(v-if="isUploading")
 
         v-cropper.cropper(
           :src="imageDataURL"
@@ -25,17 +25,23 @@
         .buttons
           a.button.is-rounded.is-outlined.is-link(
             v-if="imageDataURL"
+            :disabled="isUploading"
             @click="onCancel"
           ) Cancel
-          a.button.is-rounded.is-link(@click="onSave") Save
+          a.button.is-rounded.is-link(
+            :class="{ 'is-loading': isUploading }"
+            :disabled="isUploading"
+            @click="onSave"
+          ) Save
 
-  button.modal-close.is-large(@click="$emit('close')")
+  button.modal-close.is-large(@click="hide")
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import VCropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
-
+import FirebaseService from '@/services/firebase.service'
 import ModalFileSelect from '@/components/modals/ModalFileSelect.vue'
 
 export default {
@@ -53,7 +59,7 @@ export default {
   created () {
     const vm = this
     document.addEventListener('keyup', (e) => {
-      if (e.keyCode === 27) vm.$emit('close')
+      if (e.keyCode === 27) vm.hide()
     })
   },
   methods: {
@@ -72,19 +78,26 @@ export default {
     onCancel () {
       this.caption = ''
       this.imageDataURL = ''
-      this.$emit('close')
+      this.hide()
     },
-    onSave () {
+    async onSave () {
       this.isUploading = true
 
-      // save image preview in "edit" section of profile
+      const croppedImageDataURL = this.$refs.cropper.getCroppedCanvas().toDataURL()
+
+      // upload image to Firebase
+      const imageURL = await FirebaseService.upload(croppedImageDataURL)
+
 
       // clean up
       this.caption = ''
       this.imageDataURL = ''
       this.isUploading = false
-      this.$emit('close')
-    }
+      this.hide()
+    },
+    ...mapActions({
+      hide: 'modal/hideProfileUploadModal'
+    })
   }
 }
 </script>

@@ -13,16 +13,29 @@
 </template>
 
 <script>
+import UserService from '@/services/user.service'
+
 export default {
   name: 'OtherProfileDetails',
+  props: {
+    username: {
+      type: String,
+      default: '',
+      required: true
+    }
+  },
   data () {
     return {
-      profile: {
-        bio: 'I hate everything.',
-        imageURL: 'https://picsum.photos/300',
-        name: 'Eben T.',
-        username: 'ebxn'
-      }
+      profile: {}
+    }
+  },
+  async created () {
+    const { data, status } = await UserService.get(this.username)
+    if (status === 404) {
+      this.$router.push('/404')
+    } else {
+      this.profile = data.user
+      this.$emit('loaded')
     }
   }
 }
@@ -38,7 +51,7 @@ export default {
   }
 
   &-content {
-    padding: 15px;
+    padding: 10px 20px;
 
     & .bio {
       padding-bottom: 0;

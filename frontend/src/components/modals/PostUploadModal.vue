@@ -1,6 +1,6 @@
 <template lang="pug">
 .modal.is-active
-  .modal-background(@click="$emit('close')")
+  .modal-background(@click="hide")
   .modal-content
     .box.is-flex
       h1.title.has-text-centered Create a new post
@@ -14,7 +14,7 @@
       )
 
       template(v-else)
-        .progress(v-show="isUploading")
+        .progress(v-if="isUploading")
 
         figure.image
           img(:src="imageDataURL")
@@ -37,12 +37,16 @@
           a.button.is-rounded.is-link(
             :class="{ 'is-loading': isUploading }"
             :disabled="isUploading"
+            @click="onSave"
           ) Save
 
-  button.modal-close.is-large(@click="$emit('close')")
+  button.modal-close.is-large(@click="hide")
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import PostService from '@/services/post.service'
+import FirebaseService from '@/services/firebase.service'
 import ModalFileSelect from '@/components/modals/ModalFileSelect.vue'
 
 export default {
@@ -57,10 +61,15 @@ export default {
       isUploading: false
     }
   },
+  computed: {
+    ...mapGetters({
+      author: 'user/getUsername'
+    })
+  },
   created () {
-    const vm = this
+    const self = this
     document.addEventListener('keyup', (e) => {
-      if (e.keyCode === 27) vm.$emit('close')
+      if (e.keyCode === 27) self.hide()
     })
   },
   methods: {
@@ -76,19 +85,26 @@ export default {
     onCancel () {
       this.caption = ''
       this.imageDataURL = ''
-      this.$emit('close')
+      this.hide()
     },
-    onSave () {
+    async onSave () {
       this.isUploading = true
 
-      // create post in DB
+      // create post in database
+      const { author, caption, imageDataURL } = this
+      const imageURL = await FirebaseService.upload(imageDataURL)
+
+      PostService.create({ author, caption, imageURL })
 
       // clean up
       this.caption = ''
       this.imageDataURL = ''
       this.isUploading = false
-      this.$emit('close')
-    }
+      this.hide()
+    },
+    ...mapActions({
+      hide: 'modal/hidePostUploadModal'
+    })
   }
 }
 </script>

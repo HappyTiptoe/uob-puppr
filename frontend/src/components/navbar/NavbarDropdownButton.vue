@@ -1,12 +1,19 @@
 <template lang="pug">
 .navbar-link(@click="$emit('click')")
   figure.image.navbar-image.is-32x32
-    img.is-rounded(src="https://picsum.photos/200/200")
+    img.is-rounded(:src="user.imageURL")
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'NavbarDropdownButton'
+  name: 'NavbarDropdownButton',
+  computed: {
+    ...mapGetters({
+      user: 'user/getUser'
+    })
+  }
 }
 </script>
 

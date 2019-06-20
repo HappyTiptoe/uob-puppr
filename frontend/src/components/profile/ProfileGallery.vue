@@ -22,44 +22,64 @@
             span Favorites
 
     //- pictures
-    .columns.is-multiline(v-if="posts")
+    .columns.is-multiline(v-if="images.length !== 0")
       .column.is-6-tablet.is-3-desktop(
-        v-for="(post, idx) in posts"
+        v-for="(image, idx) in images"
         :key="idx"
       )
         .box.post
-          fugre.image.is-flex
+          figure.image.is-flex
             img(
               ref="idx"
-              :src="post.imageURL"
+              :src="image.imageURL"
             )
 
     //- text
     .no-posts(v-else)
-      h1.title.has-text-centered
-        | No {{ activeTab }} found.
+      h1.title.is-4.has-text-centered
+        | This user has no {{ activeTab }}.
 </template>
 
 <script>
+import UserService from '@/services/user.service'
+
 export default {
   name: 'ProfileGallery',
+  props: {
+    username: {
+      type: String,
+      default: '',
+      required: true
+    }
+  },
   data () {
     return {
       activeTab: 'posts',
-      posts: [
-        { imageURL: 'https://picsum.photos/832' },
-        { imageURL: 'https://picsum.photos/832' },
-        { imageURL: 'https://picsum.photos/832' },
-        { imageURL: 'https://picsum.photos/832' },
-        { imageURL: 'https://picsum.photos/832' },
-        { imageURL: 'https://picsum.photos/832' },
-        { imageURL: 'https://picsum.photos/832' }
-      ]
+      posts: [],
+      favorites: [],
+      images: []
     }
+  },
+  async created () {
+    await this.getPosts()
+    await this.getFavorites()
+
+    this.images = this.posts
+
+    this.$emit('loaded')
   },
   methods: {
     changeActiveTab (tab) {
       this.activeTab = tab
+      this.images = this[tab]
+    },
+    async getPosts () {
+      const { data } = await UserService.getPosts(this.username)
+      this.posts = data.posts || []
+    },
+    async getFavorites () {
+      const { data } = await UserService.getFavorites(this.username)
+      this.favorites = data.favoritedPosts || []
     }
   }
 }
@@ -102,6 +122,10 @@ export default {
         height: 100%;
       }
     }
+  }
+
+  & .no-posts {
+    margin-bottom: 3rem;
   }
 }
 </style>

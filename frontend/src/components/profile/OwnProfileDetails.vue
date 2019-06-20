@@ -28,20 +28,24 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'OwnProfileDetails',
   data () {
     return {
       isEditing: false,
       isUploading: false,
-      newBio: '',
-      user: {
-        bio: 'I hate everything.',
-        imageURL: 'https://picsum.photos/300',
-        name: 'Eben T.',
-        username: 'ebxn'
-      }
+      newBio: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'user/getUser'
+    })
+  },
+  mounted () {
+    this.$emit('loaded')
   },
   methods: {
     onEdit () {
@@ -68,7 +72,7 @@ export default {
   }
 
   &-content {
-    padding: 15px;
+    padding: 10px 20px;
 
     & .bio {
       padding-bottom: 0;

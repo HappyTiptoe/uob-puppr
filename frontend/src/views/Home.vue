@@ -1,12 +1,7 @@
 <template lang="pug">
   .home
-    .pageloader.is-danger(
-      :class="{ 'is-active': isLoadingPage }"
-      ref="pageloader"
-    )
-      span.title Preparing good boys...
     home-hero
-    home-content
+    home-content(@loaded="$emit('loaded')")
 </template>
 
 <script>
@@ -19,13 +14,5 @@ export default {
     HomeHero,
     HomeContent
   },
-  data () {
-    return {
-      isLoadingPage: true
-    }
-  },
-  mounted () {
-    this.isLoadingPage = false
-  }
 }
 </script>

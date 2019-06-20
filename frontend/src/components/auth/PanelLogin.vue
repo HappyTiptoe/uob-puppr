@@ -29,7 +29,10 @@
       //- submit
       .field
         .control
-          a.button.is-rounded.is-link(type="submit") Log In
+          button.button.is-rounded.is-link(
+            type="submit"
+            @click="onSubmit"
+          ) Log In
 
   p.has-text-centered
     | No account?
@@ -38,6 +41,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'PanelLogin',
   data () {
@@ -48,8 +53,13 @@ export default {
   },
   methods: {
     onSubmit () {
-
-    }
+      const { username, password } = this
+      this.login({ username, password })
+      this.$router.push('/')
+    },
+    ...mapActions({
+      login: 'user/login'
+    })
   }
 }
 </script>

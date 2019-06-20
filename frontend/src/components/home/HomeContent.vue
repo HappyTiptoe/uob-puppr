@@ -2,7 +2,7 @@
 section.home-content
   .container
     home-controls
-    home-gallery
+    home-gallery(@loaded="$emit('loaded')")
 </template>
 
 <script>

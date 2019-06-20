@@ -1,5 +1,5 @@
 <template lang="pug">
-section.hero.is-medium.is-dark
+section.hero.is-medium.is-link
   .container.has-text-centered
     .hero-body
       h1.title Hero Title

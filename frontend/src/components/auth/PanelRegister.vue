@@ -50,7 +50,10 @@
       //- submit
       .field
         .control
-          a.button.is-rounded.is-link(type="submit") Register
+          button.button.is-rounded.is-link(
+            type="submit"
+            @click="onSubmit"
+          ) Register
 
   p.has-text-centered
     | Already have an account?
@@ -59,6 +62,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'PanelRegister',
   data () {
@@ -71,8 +76,13 @@ export default {
   },
   methods: {
     onSubmit () {
-
-    }
+      const { name, username, password } = this
+      this.register({ name, username, password })
+      this.$router.push('/')
+    },
+    ...mapActions({
+      register: 'user/register'
+    })
   }
 }
 </script>

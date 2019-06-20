@@ -13,8 +13,8 @@
     .navbar-menu(:class="{ 'is-active': isNavbarHamburgerActive }")
       //- left
       .navbar-start
-        .navbar-item(v-if="!isUserLoggedIn")
-          a.button.is-rounded.is-link(@click="$emit('show-upload-modal')")
+        .navbar-item(v-if="isUserLoggedIn")
+          a.button.is-rounded.is-link(@click="showPostUploadModal")
             span.icon
               i.fas.fa-plus
             span New Post
@@ -31,10 +31,11 @@
             @mouseleave="closeNavbarDropdown"
           )
             navbar-dropdown-button(@click="toggleNavbarDropdown")
-            navbar-dropdown-menu
+            navbar-dropdown-menu(@close="closeNavbarDropdown")
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import NavbarHamburger from '@/components/navbar/NavbarHamburger.vue'
 import NavbarLogo from '@/components/navbar/NavbarLogo.vue'
 import NavbarAuthButtons from '@/components/navbar/NavbarAuthButtons.vue'
@@ -57,9 +58,9 @@ export default {
     }
   },
   computed: {
-    isUserLoggedIn () {
-      return false
-    }
+    ...mapGetters({
+      isUserLoggedIn: 'user/getAuthStatus'
+    })
   },
   methods: {
     toggleNavbarHamburger () {
@@ -70,7 +71,10 @@ export default {
     },
     closeNavbarDropdown () {
       this.isNavbarDropdownActive = false
-    }
+    },
+    ...mapActions({
+      showPostUploadModal: 'modal/showPostUploadModal'
+    })
   }
 }
 </script>
