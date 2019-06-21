@@ -1,20 +1,6 @@
 <template lang="pug">
 .home-gallery
-  .columns.is-multiline(v-if="posts && sortBy === ''")
-    .column.is-6-tablet.is-3-desktop.is-flex(
-      v-for="(post, idx) in filteredPosts"
-      :key="idx"
-    )
-      .box.post
-        figure.image.post-image.is-flex(@click="showPostModal({ post })")
-          img(:src="post.imageURL")
-
-        .post-details
-          p.caption.has-text-weight-bold {{ trimCaption(post.caption) }}
-          p.post-info Posted {{ formatDate(post.date) }} by
-            router-link(:to="{ path: `/users/${post.author}` }")  @{{ post.author }}
-
-  .columns.is-multiline(v-if="posts && sortBy === 'newest'")
+  .columns.is-multiline(v-if="posts && sortingBy === 'newest'")
     .column.is-6-tablet.is-3-desktop.is-flex(
       v-for="(post, idx) in filteredPostsByNewest"
       :key="idx"
@@ -28,9 +14,9 @@
           p.post-info Posted {{ formatDate(post.date) }} by
             router-link(:to="{ path: `/users/${post.author}` }")  @{{ post.author }}
 
-  .columns.is-multiline(v-if="posts && sortBy === 'favorites'")
+  .columns.is-multiline(v-if="posts && sortingBy === 'favorites'")
     .column.is-6-tablet.is-3-desktop.is-flex(
-      v-for="(post, idx) in filteredPostsByNewest"
+      v-for="(post, idx) in filteredPostsByFavorites"
       :key="idx"
     )
       .box.post
@@ -53,8 +39,8 @@ export default {
   props: {
     sortBy: {
       type: String,
-      default: '',
-      required: false
+      default: 'newest',
+      required: true
     },
     searchQuery: {
       type: String,
@@ -64,11 +50,11 @@ export default {
   },
   data () {
     return {
-      posts: []
+      posts: [],
+      sortingBy: this.sortBy
     }
   },
   computed: {
-    // a,b < 0 == a before b
     filteredPostsByNewest () {
       const posts = this.posts
       const sortedPosts = posts.sort((pA, pB) => {
@@ -86,16 +72,12 @@ export default {
       return sortedPosts.filter((p) => {
         return p.caption.includes(this.searchQuery)
       })
-    },
-    filteredPosts () {
-      return this.posts.filter((p) => {
-        return p.caption.includes(this.searchQuery)
-      })
     }
   },
   async created () {
     const { data } = await PostService.getAll()
     this.posts = data.posts || []
+    this.sortingBy = 'newest'
     this.$emit('loaded')
   },
   methods: {

@@ -3,6 +3,7 @@ section.home-content
   .container
     home-controls(@select="setSortBy", @input="setSearchQuery")
     home-gallery(
+      :key="homeKey"
       :sort-by="sortBy"
       :search-query="searchQuery"
       @loaded="$emit('loaded')"
@@ -10,6 +11,7 @@ section.home-content
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import HomeControls from '@/components/home/HomeControls.vue'
 import HomeGallery from '@/components/home/HomeGallery.vue'
 
@@ -21,9 +23,15 @@ export default {
   },
   data () {
     return {
+      homeGalleryKey: 0,
       sortBy: '',
       searchQuery: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      'homeKey': 'modal/getHomeKey'
+    })
   },
   methods: {
     setSortBy (t) {

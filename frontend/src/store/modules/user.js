@@ -71,8 +71,10 @@ export const actions = {
 
       // update local state
       commit('AUTH', { user })
+      return true
     } else {
       commit('UNAUTH')
+      return false
     }
   },
 

@@ -23,11 +23,11 @@
       .navbar-end
         template(v-if="!isUserLoggedIn")
           .navbar-item
-            a.button.is-rounded.is-link.is-outlined(@click="$router.push('/register')")
+            a.button.is-rounded.is-link.is-outlined(@click="navToRegister")
               | Register
 
           .navbar-item
-            a.button.is-rounded.is-link(@click="$router.push('/login')")
+            a.button.is-rounded.is-link(@click="navToLogin")
               | Log In
 
         //- dropdown menu for desktop
@@ -45,7 +45,7 @@
           template(v-if="isUserLoggedIn")
             hr.navbar-divider
             .navbar-item
-              a.button.is-rounded.is-link.is-outlined(@click="$router.push(`/users/${username}`)")
+              a.button.is-rounded.is-link.is-outlined(@click="navToAccountMobile")
                 span.icon
                   i.fas.fa-user
                 span Account
@@ -97,11 +97,26 @@ export default {
     closeNavbarDropdown () {
       this.isNavbarDropdownActive = false
     },
+    navToRegister () {
+      this.closeNavbarDropdown()
+      this.closeNavbarHamburger()
+      this.$router.push('/register')
+    },
+    navToLogin () {
+      this.closeNavbarDropdown()
+      this.closeNavbarHamburger()
+      this.$router.push('/login')
+    },
     onLogout () {
       this.logout()
       this.closeNavbarDropdown()
       this.closeNavbarHamburger()
       this.$router.push('/login')
+    },
+    navToAccountMobile () {
+      this.closeNavbarDropdown()
+      this.closeNavbarHamburger()
+      this.$router.push(`/users/${this.username}`)
     },
     ...mapActions({
       logout: 'user/logout',

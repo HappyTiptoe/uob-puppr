@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       isDropdownActive: false,
-      dropdownButtonText: 'Sort by...'
+      dropdownButtonText: 'Newest'
     }
   },
   methods: {

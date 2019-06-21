@@ -67,13 +67,19 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
+    async onSubmit () {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         const username = this.username.toLowerCase()
         const { password } = this
-        this.login({ username, password })
-        this.$router.push('/')
+        const wasSuccess = await this.login({ username, password })
+        console.log(wasSuccess)
+        if (wasSuccess) {
+          this.$router.push('/')
+        } else {
+          this.$emit('login-failure')
+          this.$router.push('/login')
+        }
       }
     },
     ...mapActions({

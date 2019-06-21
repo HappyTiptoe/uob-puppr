@@ -12,7 +12,11 @@
         br
 
       .column.panel.is-flex
-        panel-login(v-if="panel === 'login'")
+        panel-login(
+          v-if="panel === 'login'"
+          :key="componentKey"
+          @login-failure="onLoginFailure"
+        )
         panel-register(v-else)
 </template>
 
@@ -35,6 +39,7 @@ export default {
   },
   data () {
     return {
+      componentKey: 0,
       currentImageIndex: 0,
       images: [
         require('@/assets/doggo.png'),
@@ -63,6 +68,9 @@ export default {
       const imageCycleInterval = setInterval(() => {
         this.currentImageIndex = (this.currentImageIndex + 1) % 4
       }, 1000)
+    },
+    onLoginFailure () {
+      this.componentKey += 1
     }
   }
 }

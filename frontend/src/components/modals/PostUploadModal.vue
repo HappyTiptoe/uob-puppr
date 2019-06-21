@@ -94,16 +94,18 @@ export default {
       const { author, caption, imageDataURL } = this
       const imageURL = await FirebaseService.upload(imageDataURL)
 
-      PostService.create({ author, caption, imageURL })
+      await PostService.create({ author, caption, imageURL })
 
       // clean up
       this.caption = ''
       this.imageDataURL = ''
       this.isUploading = false
+      this.rerenderHome()
       this.hide()
     },
     ...mapActions({
-      hide: 'modal/hidePostUploadModal'
+      hide: 'modal/hidePostUploadModal',
+      rerenderHome: 'modal/rerenderHome'
     })
   }
 }

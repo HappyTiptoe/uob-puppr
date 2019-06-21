@@ -4,6 +4,7 @@ export const state = {
   isPostModalActive: false,
   isPostUploadModalActive: false,
   isProfileUploadModalActive: false,
+  homeKey: 0,
   post: {},
   uploadProgress: 0
 }
@@ -42,6 +43,10 @@ export const mutations = {
   SET_UPLOAD_PROGRESS: (state, payload) => {
     const { progress } = payload
     state.uploadProgress = progress
+  },
+
+  INC_HOME_KEY: (state) => {
+    state.homeKey++
   }
 }
 
@@ -69,10 +74,15 @@ export const actions = {
 
   updateProgress ({ commit }, payload) {
     commit('SET_UPLOAD_PROGRESS', payload)
+  },
+
+  rerenderHome ({ commit }) {
+    commit('INC_HOME_KEY')
   }
 }
 
 export const getters = {
+  getHomeKey: (state) => state.homeKey,
   getPostModalStatus: (state) => state.isPostModalActive,
   getPostUploadModalStatus: (state) => state.isPostUploadModalActive,
   getProfileUploadModalStatus: (state) => state.isProfileUploadModalActive,
