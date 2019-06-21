@@ -19,7 +19,6 @@
           textarea.textarea(
             v-model="newBio"
             placeholder="Write a bio..."
-            @keyup.enter="onSave"
           )
 
         .bio-edit-buttons
