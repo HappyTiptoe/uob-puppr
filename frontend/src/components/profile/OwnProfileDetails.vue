@@ -1,14 +1,18 @@
 <template lang="pug">
 .profile-card
   .profile-details-image
-    figure.image.is-square
+    figure.image.is-square(
+      @mouseover="isProfilePictureHovered = true"
+      @mouseleave="isProfilePictureHovered = false"
+    )
       img.is-rounded(:src="user.imageURL")
 
-      .edit-image-button
-        a.button.is-rounded(@click="showProfileModal")
-          span.icon
-            i.fas.fa-edit
-          span  New image
+      transition(name="edit-button")
+        .edit-image-button(v-if="isProfilePictureHovered")
+          a.button.is-rounded(@click="showProfileModal")
+            span.icon
+              i.fas.fa-edit
+            span  New image
 
   .profile-details-content
     .content
@@ -40,6 +44,7 @@ export default {
   data () {
     return {
       isEditing: false,
+      isProfilePictureHovered: false,
       isUploading: false,
       newBio: ''
     }
@@ -80,6 +85,24 @@ export default {
 
   &-image {
     padding: 15px;
+    position: relative;
+
+    & img {
+      transition: all 0.2s ease;
+    }
+
+      &:hover {
+        & img {
+          filter: blur(4px);
+        }
+      }
+
+    .edit-image-button {
+      position: absolute;
+      top: 80%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   &-content {
@@ -100,6 +123,20 @@ export default {
         margin-left: 1rem;
       }
     }
+  }
+}
+
+.edit-button {
+  &-enter, &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-to, &-leave {
+    opacity: 1;
+  }
+
+  &-enter-active, &-leave-active {
+    transition: all 0.2s ease;
   }
 }
 </style>
