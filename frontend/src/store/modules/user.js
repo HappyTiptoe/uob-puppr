@@ -25,6 +25,11 @@ export const mutations = {
   UPDATE_BIO: (state, payload) => {
     const { newBio } = payload
     state.user.bio = newBio
+  },
+
+  UPDATE_IMAGE_URL: (state, payload) => {
+    const { newImageURL } = payload
+    state.user.imageURL = newImageURL
   }
 }
 
@@ -97,6 +102,20 @@ export const actions = {
     commit('UPDATE_BIO', { newBio })
 
     // update in session
+    session.set('user', getters.getUser)
+  },
+
+  updateImageURL ({ commit, getters }, payload) {
+    const session = this._vm.$session
+    const { newImageURL } = payload
+
+    // update in databse
+    UserService.updateImageURL(getters.username, newImageURL)
+
+    // update in local storage
+    commit('UPDATE_IMAGE_URL', { newImageURL })
+
+    // update in sesssion
     session.set('user', getters.getUser)
   }
 }

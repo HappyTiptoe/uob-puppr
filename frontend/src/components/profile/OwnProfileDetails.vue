@@ -4,6 +4,12 @@
     figure.image.is-square
       img.is-rounded(:src="user.imageURL")
 
+      .edit-image-button
+        a.button.is-rounded(@click="showProfileModal")
+          span.icon
+            i.fas.fa-edit
+          span  New image
+
   .profile-details-content
     .content
       p.title.is-4 {{ user.name }}
@@ -11,7 +17,7 @@
 
       template(v-if="!isEditing")
         p.bio {{ user.bio}}
-        a.bio-edit(@click="onEdit") Edit
+        a.bio-edit(@click="onBioEdit") Edit
 
       template(v-else)
         .label Edit bio:
@@ -22,8 +28,8 @@
           )
 
         .bio-edit-buttons
-          a(@click="onCancel") Cancel
-          a(@click="onSave") Save
+          a(@click="onBioCancel") Cancel
+          a(@click="onBioSave") Save
 </template>
 
 <script>
@@ -47,19 +53,20 @@ export default {
     this.$emit('loaded')
   },
   methods: {
-    onEdit () {
+    onBioEdit () {
       this.isEditing = true
       this.newBio = this.user.bio
     },
-    onCancel () {
+    onBioCancel () {
       this.isEditing = false
     },
-    onSave () {
+    onBioSave () {
       const { newBio } = this
       this.isEditing = false
       this.updateBio({ newBio })
     },
     ...mapActions({
+      showProfileModal: 'modal/showProfileUploadModal',
       updateBio: 'user/updateBio'
     })
   }

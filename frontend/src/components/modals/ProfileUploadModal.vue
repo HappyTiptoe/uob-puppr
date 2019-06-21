@@ -86,7 +86,9 @@ export default {
       const croppedImageDataURL = this.$refs.cropper.getCroppedCanvas().toDataURL()
 
       // upload image to Firebase
-      const imageURL = await FirebaseService.upload(croppedImageDataURL)
+      const newImageURL = await FirebaseService.upload(croppedImageDataURL)
+
+      this.updateUserImage({ newImageURL })
 
       // clean up
       this.caption = ''
@@ -95,7 +97,8 @@ export default {
       this.hide()
     },
     ...mapActions({
-      hide: 'modal/hideProfileUploadModal'
+      hide: 'modal/hideProfileUploadModal',
+      updateUserImage: 'user/updateImageURL'
     })
   }
 }
