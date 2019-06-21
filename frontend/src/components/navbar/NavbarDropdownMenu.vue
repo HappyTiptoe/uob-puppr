@@ -7,12 +7,12 @@
   span(@click="$emit('close')")
     router-link.navbar-item(:to="{ path: `/users/${username}` }"  )
       span.icon
-        i.fas.fa-user
+        img.profile(:src="profileIcon")
       span Account
 
   a.navbar-item(@click="$emit('logout')")
     span.icon
-      i.fas.fa-sign-out-alt
+      img.logout(:src="logoutIcon")
     span Log Out
 </template>
 
@@ -21,6 +21,12 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'NavbarDropdownMenu',
+  data () {
+    return {
+      logoutIcon: require('@/assets/icons/Logout.svg'),
+      profileIcon: require('@/assets/icons/Profile.svg')
+    }
+  },
   computed: {
     ...mapGetters({
       username: 'user/getUsername'
@@ -40,5 +46,9 @@ export default {
       padding-left: 0.6rem;
     }
   }
+}
+
+.logout {
+  width: 100px;
 }
 </style>
