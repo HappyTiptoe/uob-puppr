@@ -17,7 +17,6 @@ const checkNotLoggedIn = (to, from, next) => {
 
 const checkProfileExists = async (to, from, next) => {
   const { status } = await UserService.get(to.params.username)
-  console.log(`status: ${status}`)
   if (status === 200) {
     next()
   } else {

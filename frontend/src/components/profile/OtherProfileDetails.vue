@@ -31,6 +31,7 @@ export default {
   },
   async created () {
     const { data, status } = await UserService.get(this.username)
+    console.log(`Username: ${this.username}`)
     if (status === 404) {
       this.$router.push('/404')
     } else {

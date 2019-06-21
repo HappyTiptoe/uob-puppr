@@ -8,11 +8,14 @@ export default {
   name: 'NavbarLogo',
   data () {
     return {
-      logo: require('@/assets/logo.png')
+      logo: require('@/assets/logos/puppr.png')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+img {
+  max-height: 2.5rem;
+}
 </style>

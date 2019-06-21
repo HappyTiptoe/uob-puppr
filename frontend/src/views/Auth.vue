@@ -2,7 +2,7 @@
 .auth.is-flex
   .container
     .columns.is-link
-      - slideshow
+      //- slideshow
       .column.is-hidden-touch.is-flex.doggo
         transition(name="slideshow")
           img.dog-image(

@@ -19,6 +19,7 @@
           )
           other-profile-details(
             v-else
+            :username="username"
             @loaded="isProfileLoaded = true"
           )
 
