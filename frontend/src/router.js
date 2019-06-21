@@ -20,7 +20,7 @@ const checkProfileExists = async (to, from, next) => {
   if (status === 200) {
     next()
   } else {
-    next('/')
+    next('/404')
   }
 }
 
@@ -53,6 +53,11 @@ const router = new Router({
       props: { panel: 'login' },
       beforeEnter: checkNotLoggedIn,
       component: () => import(/* webpackChunkName: 'login' */ './views/Auth.vue')
+    },
+    {
+      path: '/404',
+      name: 'FourOhFour',
+      component: () => import(/* webpackChunkName: '404' */ './views/404.vue')
     }
   ]
 })
