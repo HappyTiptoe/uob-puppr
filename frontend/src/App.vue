@@ -1,15 +1,5 @@
 <template lang="pug">
 #app
-  transition(
-    v-if="isPageLoading"
-    name="pageloader"
-  )
-    .pageloader.is-white.is-active
-      span.title
-        | Fetching
-        strike  sticks
-        |  information...
-
   post-modal(v-if="isPostModalActive")
   post-upload-modal(v-if="isPostUploadModalActive")
   profile-upload-modal(v-if="isProfileUploadModalActive")
@@ -72,22 +62,4 @@ export default {
 <style lang="scss" scoped>
 @import '~@/../public/css/style.css';
 @import '~@/../node_modules/@fortawesome/fontawesome-free/css/all.css';
-
-.pageloader {
-  &-enter {
-    opacity: 0;
-  }
-
-  &-enter-to, &-leave {
-    opacity: 1;
-  }
-
-  &-leave-to {
-    opacity: 0;
-  }
-
-  &-enter-active, &-leave-active {
-    transition: all 0.35s ease;
-  }
-}
 </style>

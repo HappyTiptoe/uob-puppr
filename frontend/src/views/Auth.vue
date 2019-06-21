@@ -36,11 +36,13 @@ export default {
 
 <style lang="scss" scoped>
 .column {
+  margin-top: 5.25rem;
   align-items: center;
   justify-content: center;
   height: calc(100vh - 5.25rem);
 
   @media screen and (max-width: 1023px) {
+    margin-top: 3.25rem;
     height: calc(100vh - 3.25rem);
   }
 }

@@ -1,5 +1,14 @@
 <template lang="pug">
   .profile
+    transition(
+      v-if="isPageLoading"
+      name="pageloader"
+    )
+      .pageloader.is-white.is-active
+        span.title
+          | Fetching
+          strike  sticks
+          |  information...
     .container
       .columns
         //- load from local storage/API depending on if user's profile
@@ -51,17 +60,12 @@ export default {
     isUsersProfile () {
       return this.username === this.ownUsername
     },
-    isPageLoaded () {
-      return (this.isProfileLoaded && this.isGalleryLoaded)
+    isPageLoading () {
+      return !(this.isProfileLoaded && this.isGalleryLoaded)
     },
     ...mapGetters({
       ownUsername: 'user/getUsername'
     })
-  },
-  watch: {
-    isPageLoaded (n, o) {
-      if (n) this.$emit('loaded')
-    }
   }
 }
 </script>
@@ -74,6 +78,24 @@ export default {
   @media screen and (max-width: 1023px) {
     padding-top: 5.25rem;
     min-height: calc(100vh - 3.25rem);
+  }
+}
+
+.pageloader {
+  &-enter {
+    opacity: 0;
+  }
+
+  &-enter-to, &-leave {
+    opacity: 1;
+  }
+
+  &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-active, &-leave-active {
+    transition: all 0.35s ease;
   }
 }
 </style>

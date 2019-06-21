@@ -3,44 +3,41 @@
   .modal-background(@click="hide")
   .modal-content
     .box
-      .columns
-        .column-is-narrow.post-image
-          figure.image
-            img(:src="post.imageURL")
+      figure.post-image.image.is-flex
+        img(:src="post.imageURL")
 
-        .column.post-details.is-flex-desktop
-          .post-author-details
-            .media.is-flex
-              figure.media-left
-                p.image.is-48x48
-                  img.is-rounded(:src="authorImageURL")
-              .media-content
-                .content
-                  p.post-author {{ post.author }}
-                  p.post-date {{ formatDate(post.date) }}
-              .media-right
-                span.icon
-                  i.fas.fa-heart.has-text-danger(
-                    v-if="isPostFavorited"
-                    @click="unfavoritePost"
-                  )
-                  i.far.fa-heart(
-                    v-else
-                    @click="favoritePost"
-                  )
-                span {{ post.favorites }}
+      .post-details
+        .post-author
+          .media.is-flex
+            figure.media-left
+              p.image.is-48x48(@click="goToProfile(post.author)")
+                img.is-rounded(:src="authorImageURL")
+            .media-content
+              .content
+                span.author
+                  a.has-text-weight-bold(@click="goToProfile(post.author)") {{ post.author }}
+                br
+                span.post-date {{ formatDate(post.date) }}
+            .media-right
+              span.icon.is-large
+                i.fas.fa-heart.has-text-danger(
+                  v-if="isPostFavorited"
+                  @click="unfavoritePost"
+                )
+                i.far.fa-heart(
+                  v-else
+                  @click="favoritePost"
+                )
+              span.favorites {{ post.favorites }}
+        p.caption {{ post.caption }}
 
-            p.post-caption {{ post.caption }}
+        hr.post-divider
 
-          hr.post-divider
+        .comments
+          .comment(v-for="(comment, idx) in comments")
+            a.has-text-weight-bold(@click="goToProfile(comment.author)") {{ comment.author }}
 
-          .comments.is-clearfix
-            .comment(
-              v-for="(comment, idx) in comments"
-              :key="idx"
-            )
-              router-link.has-text-weight-bold(:to="{ path: `/users/${comment.author}` }") {{ comment.author }}
-              span(v-if="activeDeleteButton !== idx")  {{ comment.body }}
+            span(v-if="activeDeleteButton !== idx")  {{ comment.body }}
               .delete-button.is-pulled-right(v-if="username === comment.author")
                 span.icon.is-small(
                   v-if="activeDeleteButton !== idx"
@@ -48,24 +45,21 @@
                 )
                   i.fas.fa-trash
 
-                span(v-else)
-                  span.has-text-danger Are you sure?
-                  a(@click="deleteComment(comment.id)")  Yes
-                  |  /
-                  a(@click="activeDeleteButton = -1")  No
+            span.is-pulled-right(v-else)
+              span.has-text-danger Are you sure?
+              a(@click="deleteComment(comment.id)")  Yes
+              |  /
+              a(@click="activeDeleteButton = -1")  No
 
-          .field
-            .control.has-icons-left
-              input.input.is-rounded(
-                v-model="newComment"
-                :disabled="isDeletingComment"
-                placeholder="Write a comment..."
-                @keyup.enter="postComment"
-              )
-              span.icon.is-small.is-left
-                i.fas.fa-edit
-
-  button.modal-close.is-large(@click="hide")
+      .field
+        .control.has-icons-left
+          input.input.is-rounded(
+            v-model="newComment"
+            placeholder="Write a comment..."
+            @keyup.enter="postComment"
+          )
+          span.icon.is-small.is-left
+            i.fas.fa-edit
 </template>
 
 <script>
@@ -81,7 +75,6 @@ export default {
       activeDeleteButton: -1,
       authorImageURL: '',
       comments: [],
-      isDeletingComment: false,
       isPostFavorited: false,
       newComment: '',
       userFavoritedPostIDs: []
@@ -94,17 +87,17 @@ export default {
     })
   },
   async created () {
-    const that = this
+    const self = this
 
     document.addEventListener('keyup', (e) => {
-      if (e.keyCode === 27) that.hide()
+      if (e.keyCode === 27) self.hide()
     })
 
     await this.getAuthorImageURL()
     await this.getFavoritedPostIDs()
-    await this.getComments()
-
     this.isPostFavorited = this.userFavoritedPostIDs.includes(this.post.id)
+
+    await this.getComments()
   },
   methods: {
     formatDate (date) {
@@ -129,7 +122,7 @@ export default {
 
       await PostService.createComment(this.post.id, { body, author })
 
-      this.comments.unshift({ author, body, postID: this.post.id })
+      this.comments.push({ author, body, postID: this.post.id })
       this.newComment = ''
     },
     async deleteComment (commentID) {
@@ -137,7 +130,6 @@ export default {
       await PostService.deleteComment(this.post.id, commentID)
       this.comments.splice(this.activeDeleteButton, 1)
       this.activeDeleteButton = -1
-      this.isDeletingComment = false
     },
     async favoritePost () {
       this.isPostFavorited = true
@@ -149,6 +141,10 @@ export default {
       this.post.favorites--
       await PostService.deleteFavorite(this.post.id, this.username)
     },
+    goToProfile (username) {
+      this.$router.push(`/users/${username}`)
+      this.hide()
+    },
     ...mapActions({
       hide: 'modal/hidePostModal'
     })
@@ -158,88 +154,53 @@ export default {
 
 <style lang="scss" scoped>
 .modal-content {
-  width: auto;
-  max-width: 1280px;
-  max-height: 960px;
-
-  // phone
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
-
-  & .columns {
-    padding: 0;
-    margin: 0;
-
-    & .column {
-      width: 100%;
-      min-height: 100%;
-      padding: 0.5rem;
-      flex-direction: column;
-      // justify-content: center;
-    }
-  }
+  min-width: 500px;
+  max-width: 1000px;
+  max-height: 1000px;
+  // overflow: hidden;
+  overflow: hidden;
 
   & .box {
-    overflow: hidden;
     padding: 0;
-    margin: 0;
   }
 
   & .post-image {
-    // width: auto;
+    width: auto;
+    max-width: 40rem;
+    justify-content: center;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
 
     & img {
-      min-height: 100%;
-    }
-
-    // desktop
-    @media screen and (min-width: 769px) {
-      height: 480px;
+      // max-height: 50%;
+      width: auto;
+      max-height: 30rem;
     }
   }
 
   & .post-details {
-    // desktop
-    @media screen and (min-width: 769px) {
-      max-width: 290px;
-    }
-  }
+    padding: 25px;
+    max-height: 15rem;
+    overflow: auto;
 
-  & .post-author-details {
-    padding: 0.5rem;
-    min-width: 15rem;
-    // align-self: flex-start;
+    & .post-author {
 
-    & .media {
-      align-items: center;
-      word-wrap: break-all;
-    }
+      & .media {
+        height: 48px;
+        align-items: center;
+        word-wrap: break-all;
+      }
 
-    & .media-left {
-      margin-right: 0.5rem;
+      & .icon, & .favorites {
+        font-size: 1.5rem;
+      }
     }
 
-    & .post-date {
-      margin-top: -1rem;
+    & .caption {
+      margin-top: 10px;
     }
-  }
 
-  .post-caption{
-    margin-top: 0.5rem;
-  }
-
-  .post-divider {
-    margin: 0.5rem 0;
-  }
-
-  & .comments {
-    width: 100%;
-
-    // desktop
-    @media screen and (min-width: 769px) {
-      max-height: 350px;
-      overflow: auto;
+    & hr.post-divider {
+      margin: 15px 0;
     }
 
     & .comment {
@@ -252,20 +213,7 @@ export default {
   }
 
   & .field {
-    margin-top: 0.5rem;
-    // align-self: flex-end;
-    width: 100%;
-  }
-}
-
-button.modal-close {
-  @media screen and (max-width: 768px) {
-    background-color: white;
-    border: 1px solid black;
-
-    &::before, &::after {
-      background-color: black;
-    }
+    padding: 5px 25px 20px 25px;
   }
 }
 </style>
