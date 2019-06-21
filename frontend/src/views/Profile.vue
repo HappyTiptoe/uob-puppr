@@ -66,6 +66,9 @@ export default {
     ...mapGetters({
       ownUsername: 'user/getUsername'
     })
+  },
+  created () {
+    document.title = `${this.username}'s Profile`
   }
 }
 </script>

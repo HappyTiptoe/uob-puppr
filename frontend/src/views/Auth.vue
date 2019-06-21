@@ -52,6 +52,7 @@ export default {
   },
   created () {
     this.updateDogImage()
+    document.title = this.panel.charAt(0).toUpperCase() + this.panel.slice(1)
   },
   mounted () {
     this.$emit('loaded')

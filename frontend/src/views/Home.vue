@@ -29,6 +29,9 @@ export default {
       isPageLoading: true
     }
   },
+  created () {
+    document.title = 'Gallery'
+  },
   methods: {
     hidePageLoader () {
       this.isPageLoading = false
