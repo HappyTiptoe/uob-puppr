@@ -35,37 +35,45 @@ export const mutations = {
 
 export const actions = {
   async register ({ commit }, payload) {
-    const { data } = await AuthService.register(payload)
+    const { data, status } = await AuthService.register(payload)
     const { user, token } = data
 
-    // add token to api client
-    TokenService.set(token)
+    if (status === 200) {
+      // add token to api client
+      TokenService.set(token)
 
-    // init session and add token/user
-    const session = this._vm.$session
-    session.start()
-    session.set('token', token)
-    session.set('user', user)
+      // init session and add token/user
+      const session = this._vm.$session
+      session.start()
+      session.set('token', token)
+      session.set('user', user)
 
-    // update local state
-    commit('AUTH', { user })
+      // update local state
+      commit('AUTH', { user })
+    } else {
+      commit('UNAUTH')
+    }
   },
 
   async login ({ commit }, payload) {
-    const { data } = await AuthService.login(payload)
+    const { data, status } = await AuthService.login(payload)
     const { user, token } = data
 
-    // add token to api client
-    TokenService.set(token)
+    if (status === 200) {
+      // add token to api client
+      TokenService.set(token)
 
-    // init session and add token/user
-    const session = this._vm.$session
-    session.start()
-    session.set('token', token)
-    session.set('user', user)
+      // init session and add token/user
+      const session = this._vm.$session
+      session.start()
+      session.set('token', token)
+      session.set('user', user)
 
-    // update local state
-    commit('AUTH', { user })
+      // update local state
+      commit('AUTH', { user })
+    } else {
+      commit('UNAUTH')
+    }
   },
 
   logout ({ commit }) {
