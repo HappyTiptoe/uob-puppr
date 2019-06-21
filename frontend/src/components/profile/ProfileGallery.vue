@@ -28,7 +28,7 @@
         :key="idx"
       )
         .box.post
-          figure.image.is-flex
+          figure.image.is-flex(@click="showPostModal({ post: image })")
             img(
               ref="idx"
               :src="image.imageURL"
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import UserService from '@/services/user.service'
 
 export default {
@@ -80,7 +81,10 @@ export default {
     async getFavorites () {
       const { data } = await UserService.getFavorites(this.username)
       this.favorites = data.favoritedPosts || []
-    }
+    },
+    ...mapActions({
+      showPostModal: 'modal/showPostModal'
+    })
   }
 }
 </script>

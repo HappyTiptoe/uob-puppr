@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import UserService from '@/services/user.service'
 
 Vue.use(Router)
 
@@ -11,6 +12,16 @@ const checkNotLoggedIn = (to, from, next) => {
     next('/')
   } else {
     next()
+  }
+}
+
+const checkProfileExists = async (to, from, next) => {
+  const { status } = await UserService.get(to.params.username)
+  console.log(`status: ${status}`)
+  if (status === 200) {
+    next()
+  } else {
+    next('/')
   }
 }
 
@@ -27,6 +38,7 @@ const router = new Router({
       path: '/users/:username',
       name: 'profile',
       props: true,
+      beforeEnter: checkProfileExists,
       component: () => import(/* webpackChunkName: 'profile' */ './views/Profile.vue')
     },
     {

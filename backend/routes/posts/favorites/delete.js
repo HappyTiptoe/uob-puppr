@@ -4,8 +4,6 @@ module.exports = async (req, res) => {
   const { postID } = req.params
   const { username } = req.body
 
-  console.log(`deleting for user: ${username}`)
-
   // decrement number of favorites on post
   const post = await db.posts.findOneBy('id', postID)
   const newFavorites = post.favorites - 1

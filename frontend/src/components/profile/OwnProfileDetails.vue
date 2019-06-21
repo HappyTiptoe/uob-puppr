@@ -1,8 +1,18 @@
 <template lang="pug">
 .profile-card
   .profile-details-image
-    figure.image.is-square
+    figure.image.is-square(
+      @mouseover="isProfilePictureHovered = true"
+      @mouseleave="isProfilePictureHovered = false"
+    )
       img.is-rounded(:src="user.imageURL")
+
+      transition(name="edit-button")
+        .edit-image-button(v-if="isProfilePictureHovered")
+          a.button.is-rounded(@click="showProfileModal")
+            span.icon
+              i.fas.fa-edit
+            span  New image
 
   .profile-details-content
     .content
@@ -11,7 +21,7 @@
 
       template(v-if="!isEditing")
         p.bio {{ user.bio}}
-        a.bio-edit(@click="onEdit") Edit
+        a.bio-edit(@click="onBioEdit") Edit
 
       template(v-else)
         .label Edit bio:
@@ -19,12 +29,11 @@
           textarea.textarea(
             v-model="newBio"
             placeholder="Write a bio..."
-            @keyup.enter="onSave"
           )
 
         .bio-edit-buttons
-          a(@click="onCancel") Cancel
-          a(@click="onSave") Save
+          a(@click="onBioCancel") Cancel
+          a(@click="onBioSave") Save
 </template>
 
 <script>
@@ -35,6 +44,7 @@ export default {
   data () {
     return {
       isEditing: false,
+      isProfilePictureHovered: false,
       isUploading: false,
       newBio: ''
     }
@@ -48,19 +58,20 @@ export default {
     this.$emit('loaded')
   },
   methods: {
-    onEdit () {
+    onBioEdit () {
       this.isEditing = true
       this.newBio = this.user.bio
     },
-    onCancel () {
+    onBioCancel () {
       this.isEditing = false
     },
-    onSave () {
+    onBioSave () {
       const { newBio } = this
       this.isEditing = false
       this.updateBio({ newBio })
     },
     ...mapActions({
+      showProfileModal: 'modal/showProfileUploadModal',
       updateBio: 'user/updateBio'
     })
   }
@@ -74,6 +85,24 @@ export default {
 
   &-image {
     padding: 15px;
+    position: relative;
+
+    & img {
+      transition: all 0.2s ease;
+    }
+
+      &:hover {
+        & img {
+          filter: blur(4px);
+        }
+      }
+
+    .edit-image-button {
+      position: absolute;
+      top: 80%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 
   &-content {
@@ -94,6 +123,20 @@ export default {
         margin-left: 1rem;
       }
     }
+  }
+}
+
+.edit-button {
+  &-enter, &-leave-to {
+    opacity: 0;
+  }
+
+  &-enter-to, &-leave {
+    opacity: 1;
+  }
+
+  &-enter-active, &-leave-active {
+    transition: all 0.2s ease;
   }
 }
 </style>

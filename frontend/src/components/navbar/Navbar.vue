@@ -42,18 +42,19 @@
 
         //- buttons for mobile
         .is-hidden-desktop
-          hr.navbar-divider
-          .navbar-item
-            a.button.is-rounded.is-link.is-outlined(@click="$router.push(`/users/${username}`)")
-              span.icon
-                i.fas.fa-user
-              span Account
+          template(v-if="isUserLoggedIn")
+            hr.navbar-divider
+            .navbar-item
+              a.button.is-rounded.is-link.is-outlined(@click="$router.push(`/users/${username}`)")
+                span.icon
+                  i.fas.fa-user
+                span Account
 
-          .navbar-item
-            a.button.is-rounded.is-danger.is-outlined(@click="onLogout")
-              span.icon
-                i.fas.fa-sign-out-alt
-              span Log Out
+            .navbar-item
+              a.button.is-rounded.is-danger.is-outlined(@click="onLogout")
+                span.icon
+                  i.fas.fa-sign-out-alt
+                span Log Out
 </template>
 
 <script>
