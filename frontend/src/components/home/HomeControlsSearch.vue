@@ -2,10 +2,10 @@
 .field
   .control.has-icons-left
     input.input.is-rounded(
-      :value="value"
+      v-model="query"
       ref="homeControlsSearch"
       placeholder="Search images..."
-      @input="$emit('input', $refs.input.value)"
+      @input="$emit('input', query.toLowerCase())"
     )
     span.icon.is-small.is-left
       i.fas.fa-search
@@ -14,11 +14,9 @@
 <script>
 export default {
   name: 'HomeControlsSearch',
-  props: {
-    value: {
-      type: String,
-      default: '',
-      required: true
+  data () {
+    return {
+      query: ''
     }
   }
 }

@@ -9,6 +9,7 @@
           | Fetching
           strike  sticks
           |  information...
+
     home-hero
     home-content(@loaded="hidePageLoader")
 </template>
@@ -54,4 +55,16 @@ export default {
     transition: all 0.35s ease;
   }
 }
+// .notification {
+//   min-width: 10rem;
+//   font-size: 1.25rem;
+//   position: fixed;
+//   left: 50%;
+//   bottom: 0;
+//   z-index: 9999;
+//   transform: translate(-50%, -50%);
+//   box-shadow: 0 3px 1px -2px rgba(0, 0, 0,  0.2),
+//               0 2px 2px  0px rgba(0, 0, 0, 0.14),
+//               0 1px 5px  0px rgba(0, 0, 0, 0.12);
+// }
 </style>

@@ -6964,3 +6964,6 @@ label.panel-block {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+.button {
+  transition: all 0.2s ease; }

@@ -2,8 +2,8 @@
 section.hero.is-medium.is-link
   .container.has-text-centered
     .hero-body
-      h1.title Hero Title
-      h2.subtile Hero Subtitle
+      h1.title gallery.
+      h2.subtile puppr.
 </template>
 
 <script>

@@ -1,8 +1,12 @@
 <template lang="pug">
 section.home-content
   .container
-    home-controls
-    home-gallery(@loaded="$emit('loaded')")
+    home-controls(@select="setSortBy", @input="setSearchQuery")
+    home-gallery(
+      :sort-by="sortBy"
+      :search-query="searchQuery"
+      @loaded="$emit('loaded')"
+    )
 </template>
 
 <script>
@@ -14,6 +18,20 @@ export default {
   components: {
     HomeControls,
     HomeGallery
+  },
+  data () {
+    return {
+      sortBy: '',
+      searchQuery: ''
+    }
+  },
+  methods: {
+    setSortBy (t) {
+      this.sortBy = t
+    },
+    setSearchQuery (s) {
+      this.searchQuery = s
+    }
   }
 }
 </script>

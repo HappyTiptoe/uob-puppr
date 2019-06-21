@@ -1,8 +1,8 @@
 <template lang="pug">
 .home-gallery
-  .columns.is-multiline(v-if="posts")
+  .columns.is-multiline(v-if="posts && sortBy === ''")
     .column.is-6-tablet.is-3-desktop.is-flex(
-      v-for="(post, idx) in posts"
+      v-for="(post, idx) in filteredPosts"
       :key="idx"
     )
       .box.post
@@ -10,20 +10,87 @@
           img(:src="post.imageURL")
 
         .post-details
-          p.caption.has-text-weight-bold {{ post.caption }}
-          p.post-info Posted {{ '2 days ago' }} by
+          p.caption.has-text-weight-bold {{ trimCaption(post.caption) }}
+          p.post-info Posted {{ formatDate(post.date) }} by
+            router-link(:to="{ path: `/users/${post.author}` }")  @{{ post.author }}
+
+  .columns.is-multiline(v-if="posts && sortBy === 'newest'")
+    .column.is-6-tablet.is-3-desktop.is-flex(
+      v-for="(post, idx) in filteredPostsByNewest"
+      :key="idx"
+    )
+      .box.post
+        figure.image.post-image.is-flex(@click="showPostModal({ post })")
+          img(:src="post.imageURL")
+
+        .post-details
+          p.caption.has-text-weight-bold {{ trimCaption(post.caption) }}
+          p.post-info Posted {{ formatDate(post.date) }} by
+            router-link(:to="{ path: `/users/${post.author}` }")  @{{ post.author }}
+
+  .columns.is-multiline(v-if="posts && sortBy === 'favorites'")
+    .column.is-6-tablet.is-3-desktop.is-flex(
+      v-for="(post, idx) in filteredPostsByNewest"
+      :key="idx"
+    )
+      .box.post
+        figure.image.post-image.is-flex(@click="showPostModal({ post })")
+          img(:src="post.imageURL")
+
+        .post-details
+          p.caption.has-text-weight-bold {{ trimCaption(post.caption) }}
+          p.post-info Posted {{ formatDate(post.date) }} by
             router-link(:to="{ path: `/users/${post.author}` }")  @{{ post.author }}
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import DateService from '@/services/date.service'
 import PostService from '@/services/post.service'
 
 export default {
   name: 'HomeGallery',
+  props: {
+    sortBy: {
+      type: String,
+      default: '',
+      required: false
+    },
+    searchQuery: {
+      type: String,
+      default: '',
+      required: false
+    }
+  },
   data () {
     return {
       posts: []
+    }
+  },
+  computed: {
+    // a,b < 0 == a before b
+    filteredPostsByNewest () {
+      const posts = this.posts
+      const sortedPosts = posts.sort((pA, pB) => {
+        return pA.date < pB.date
+      })
+      return sortedPosts.filter((p) => {
+        return p.caption.includes(this.searchQuery)
+      })
+    },
+    filteredPostsByFavorites () {
+      const posts = this.posts
+      const sortedPosts = posts.sort((pA, pB) => {
+        return pA.favorites < pB.favorites
+      })
+      return sortedPosts.filter((p) => {
+        return p.caption.includes(this.searchQuery)
+      })
+    },
+    filteredPosts () {
+      return this.posts.filter((p) => {
+        return p.caption.includes(this.searchQuery)
+      })
     }
   },
   async created () {
@@ -32,6 +99,13 @@ export default {
     this.$emit('loaded')
   },
   methods: {
+    trimCaption (caption) {
+      const nws = caption.trim()
+      return nws.length > 40 ? nws.slice(0, 40) + '...' : nws
+    },
+    formatDate (date) {
+      return DateService.fromNow(date)
+    },
     ...mapActions({
       showPostModal: 'modal/showPostModal'
     })

@@ -4,7 +4,17 @@ import Home from './views/Home.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const checkNotLoggedIn = (to, from, next) => {
+  const isUserLoggedIn = router.app.$session.get('token')
+
+  if (isUserLoggedIn) {
+    next('/')
+  } else {
+    next()
+  }
+}
+
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -23,13 +33,17 @@ export default new Router({
       path: '/register',
       name: 'register',
       props: { panel: 'register' },
+      beforeEnter: checkNotLoggedIn,
       component: () => import(/* webpackChunkName: 'register' */ './views/Auth.vue')
     },
     {
       path: '/login',
       name: 'login',
       props: { panel: 'login' },
+      beforeEnter: checkNotLoggedIn,
       component: () => import(/* webpackChunkName: 'login' */ './views/Auth.vue')
     }
   ]
 })
+
+export default router

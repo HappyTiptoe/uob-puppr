@@ -10,3 +10,7 @@
   -ms-user-select: none;       // IE/Edge
   user-select: none;           // Chrome/Opera
 }
+
+.button {
+  transition: all 0.1s ease;
+}

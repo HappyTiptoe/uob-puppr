@@ -11,10 +11,10 @@
 
   .dropdown-menu
     .dropdown-content
-      a.dropdown-item(@click="setDropdownButtonText('Popularity')")
+      a.dropdown-item(@click="setDropdownButtonText('Newest')")
         span.icon
-          i.fas.fa-thumbs-up
-        span Popularity
+          i.fas.fa-clock
+        span Newest
 
       a.dropdown-item(@click="setDropdownButtonText('Favorites')")
         span.icon
@@ -40,6 +40,7 @@ export default {
     },
     setDropdownButtonText (text) {
       this.dropdownButtonText = text
+      this.$emit('select', text.toLowerCase())
       this.closeDropdown()
     }
   }

@@ -3,11 +3,11 @@
   .columns.is-multiline.is-mobile
     //- sorting
     .column.is-6-mobile.is-3-tablet.is-flex
-      home-controls-sort
+      home-controls-sort(@select="t => $emit('select', t)")
 
     //- search
     .column.is-12-mobile.is-4-tablet.is-offset-1-tablet.is-flex
-      home-controls-search(v-model="query")
+      home-controls-search(@input="s => $emit('input', s)")
 
     //- grid/list toggle
     .column.is-6-mobile.is-3-tablet.is-offset-1-tablet.is-flex
@@ -26,11 +26,6 @@ export default {
     HomeControlsSort,
     HomeControlsSearch,
     HomeControlsToggle
-  },
-  data () {
-    return {
-      query: ''
-    }
   }
 }
 </script>

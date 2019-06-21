@@ -10,30 +10,20 @@
         i.fas.fa-user
       span Account
 
-  a.navbar-item(@click="onLogout")
+  a.navbar-item(@click="$emit('logout')")
     span.icon
       i.fas.fa-sign-out-alt
     span Log Out
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'NavbarDropdownMenu',
   computed: {
     ...mapGetters({
       username: 'user/getUsername'
-    })
-  },
-  methods: {
-    onLogout () {
-      this.logout()
-      this.$emit('close')
-      this.$router.push('/login')
-    },
-    ...mapActions({
-      logout: 'user/logout'
     })
   }
 }
