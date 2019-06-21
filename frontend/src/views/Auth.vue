@@ -1,8 +1,8 @@
 <template lang="pug">
 .auth.is-flex
   .container
-    .columns
-      //- slideshow
+    .columns.is-link
+      - slideshow
       .column.is-hidden-touch.is-flex.doggo
         transition(name="slideshow")
           img.dog-image(
@@ -10,7 +10,6 @@
             :src="dogImage"
           )
         br
-        h1.title.is-bold.is-1.has-text-centered puppr.
 
       .column.panel.is-flex
         panel-login(v-if="panel === 'login'")
@@ -42,7 +41,8 @@ export default {
         require('@/assets/doggo2.png'),
         require('@/assets/doggo3.png'),
         require('@/assets/doggo4.png')
-      ]
+      ],
+      logo: require('@/assets/logos/logov2.png')
     }
   },
   computed: {
@@ -69,6 +69,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .column {
   align-items: center;
   justify-content: center;
@@ -79,6 +80,9 @@ export default {
 }
 
 .doggo {
+  margin-left: 10rem;
+  padding-top: 30rem;
+
   flex-direction: column;
 }
 
@@ -105,4 +109,12 @@ h1 {
 .slideshow-enter, .slideshow-leave-to {
   opacity: 0;
 }
+
+.logo {
+  width: 900px;
+  height: 550px;
+  padding-right: 0;
+  margin-top: 16rem;
+}
+
 </style>
