@@ -42,7 +42,7 @@ class UserRepo {
   }
 
   update(username, field, newValue) {
-    const query = `UPDATE users SET bio = ? WHERE username = ?`
+    const query = `UPDATE users SET ${field} = ? WHERE username = ?`
     return this.DAO.run(query, [newValue, username])
   }
 
