@@ -104,7 +104,7 @@ export const actions = {
     const { newBio } = payload
 
     // update in database
-    UserService.updateBio(getters.username, newBio)
+    UserService.updateBio(getters.getUsername, newBio)
 
     // update in local storage
     commit('UPDATE_BIO', { newBio })
@@ -118,7 +118,7 @@ export const actions = {
     const { newImageURL } = payload
 
     // update in databse
-    UserService.updateImageURL(getters.username, newImageURL)
+    UserService.updateImageURL(getters.getUsername, newImageURL)
 
     // update in local storage
     commit('UPDATE_IMAGE_URL', { newImageURL })

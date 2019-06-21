@@ -1,6 +1,7 @@
 const db = require(`${process.env.PWD}/database/db`)
 
 module.exports = async (req, res) => {
+  console.log(req.params)
   const { username } = req.params
   const { newBio } = req.body
 
