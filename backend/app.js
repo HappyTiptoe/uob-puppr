@@ -3,6 +3,8 @@ console.log(`Starting server...`)
 
 const express = require('express')
 const app = express()
+const fs = require('fs')
+const https = require('https')
 const bodyParser = require('body-parser')
 const cors = require('cors')({ origin: true })
 console.log(`Loaded dependencies...`)
@@ -18,6 +20,9 @@ require('./routes')(app)
 console.log(`Loaded routes...`)
 
 // eslint-disable-next-line
-const server = app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server listening on port ${process.env.PORT || 3000}...`)
+https.createServer({
+	key: fs.readFileSync('server.key'),
+	cert: fs.readFileSync('server.cert')
+}, app).listen(3000, function() {
+	console.log('puppr listening on port 3000! Go to https://localhost:3000/')
 })

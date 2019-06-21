@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const ApiService = {
   client: axios.create({
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'https://10.0.0.4:3000',
     headers: {
       Accept: 'application/json',
       'Access-Control-Allow-Origin': '*',
