@@ -1,4 +1,4 @@
-<p align="center"><img src="https://user-images.githubusercontent.com/15062683/69426285-d3b41680-0d24-11ea-8d2e-5226480a93e7.png" width=450 height=180/></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/15062683/69426661-a2881600-0d25-11ea-99ca-6984b96e8021.png" width=450 height=180/></p>
 
 >‘puppr’ is an web gallery specifically for people who want to show off images of their dogs. Once signed up, users can upload pictures of their dogs alongside captions, and interact with other users’ posts by commenting on them, or by adding them to your favourites to keep on your profile to view any time.
 
