@@ -1,6 +1,6 @@
 <p align="center"><img src="https://user-images.githubusercontent.com/15062683/69426661-a2881600-0d25-11ea-99ca-6984b96e8021.png" width=450 height=180/></p>
 
->‘puppr’ is an web gallery specifically for people who want to show off images of their dogs. Once signed up, users can upload pictures of their dogs alongside captions, and interact with other users’ posts by commenting on them, or by adding them to your favourites to keep on your profile to view any time.
+>‘puppr’ is a web gallery specifically for people who want to show off images of their dogs. Once signed up, users can upload pictures of their dogs alongside captions, and interact with other users’ posts by commenting on them, or by adding them to your favourites to keep on your profile to view any time.
 
 <p align="center"><img src="https://user-images.githubusercontent.com/15062683/69425943-d7936900-0d23-11ea-987a-84d6df4d23ff.gif"/></p>
 
